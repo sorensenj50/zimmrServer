@@ -1,6 +1,6 @@
-const { read } = require("../getCypher")
-const { write } = require("../postCypher")
-const { proc } = require("../processingFunctions")
+const { read } = require("./getCypher")
+const { write } = require("./postCypher")
+const { proc } = require("./processingFuncs")
 
 class AltTestObject {
     constructor(func, params, result, message) {

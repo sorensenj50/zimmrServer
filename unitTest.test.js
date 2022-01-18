@@ -1,7 +1,7 @@
-const { read } = require("../getCypher")
-const { write } = require("../postCypher")
-const { proc, QueryExecutor } = require("../processingFunctions")
-const { getExtraInvites } = require("../hostEvent")
+const { read } = require("./getCypher")
+const { write } = require("./postCypher")
+const { proc, QueryExecutor } = require("./processingFunctions")
+const { getExtraInvites } = require("./hostEvent")
 
 const { testCypher, testProc, TestObject, UserList, Feed, UserRelationship,
     User, Groups, EventRelationship, GroupRelationship, Connections, ConnectionsRemoval, MessageEvent, Search, AltTestObject } = require("./testFuncs")
@@ -14,13 +14,10 @@ const { beforeAfter } = require("./beforeAfter")
 const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io'; // test database
 const user = 'neo4j';
 const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
-const neo4j = require("neo4j-driver");
-
 
 jest.setTimeout(10_000)
 
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-const executor = new QueryExecutor(driver)
+const executor = new QueryExecutor(uri, user, password, false)
 
 function executeTest(testObject) { // refactor at some point
     return new Promise(resolve => {

@@ -12,5 +12,8 @@
   "dependencies": {
     "express": "^4.17.2",
     "neo4j-driver": "^4.4.1"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
   }
 }

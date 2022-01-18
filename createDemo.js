@@ -3,7 +3,7 @@ const { demoUsers, connections, friendShips, demoEvents,
     links, receivers, dismissObject
 } = require("./demoData")
 
-const { write } = require("../postCypher")
+const { write } = require("./postCypher")
 const { testProc, testCypher } = require("./testFuncs")
 
 

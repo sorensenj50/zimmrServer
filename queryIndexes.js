@@ -27,6 +27,30 @@ function createUserFullTextSearchIndex(tx) {
     return tx.run("CREATE FULLTEXT INDEX userSearch FOR (n:USER) ON EACH [n.fullName, n.userName]")
 }
 
+function initializeIndices(executor) {
+    return new Promise(resolve => {
+        executor.writeQuery(createUserIndex, [])
+            .then(_ => {
+                console.log("Created Index on userID")
+                return executor.writeQuery(createEventIndex, [])
+            })
+            .then(_ => {
+                console.log("Created Index on eventID")
+                return executor.writeQuery(createUserNameIndex, [])
+            })
+            .then(_ => {
+                console.log("Created Index on userName")
+                return executor.writeQuery(createUserFullTextSearchIndex, [])
+            })
+            .then(_ => {
+                console.log("Created Full text search index")
+                console.log("Group Index not yet created")
+                resolve("Finished")
+            })
+    })
+}
 
 
-module.exports = { createUserIndex, createEventIndex, createUserFullTextSearchIndex, createGroupIndex, displayIndexes, createUserNameIndex };
+
+
+module.exports = { displayIndexes, initializeIndices };

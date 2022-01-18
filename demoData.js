@@ -1,4 +1,4 @@
-const { proc } = require("../processingFunctions")
+const { proc } = require("./processingFuncs")
 const { testProc } = require("./testFuncs")
 
 

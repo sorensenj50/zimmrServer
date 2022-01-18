@@ -9,11 +9,7 @@ const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io'; // test database
 const user = 'neo4j';
 const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
 
-
-const neo4j = require('neo4j-driver')
-
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-const executor = new QueryExecutor(driver)
+const executor = new QueryExecutor(uri, user, password, false)
 
 // stuff for server
 const express = require("express");
