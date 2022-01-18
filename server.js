@@ -162,7 +162,7 @@ app.post("/host", (req, res) => {
 app.get("/userList", (req, res) => {
     const userID = req.query.userID;
     const type = req.query.type;
-    const otherID = req.query.otherID;
+    const otherID = req.query.otherID; // other id sometimes is event id
 
     console.log("Received User List Get Request: " + type)
 
@@ -187,6 +187,9 @@ app.get("/userList", (req, res) => {
     } else if (type == "search") {
         const searchPromise = executor.readQuery(read.userSearch, [userID, req.query.searchTerm + "*"])
         proc.sendJSON(res, searchPromise, proc.processUsers)
+    } else if (type == "notInvited") {
+        const notInvitedPromise = executor.readQuery(read.getFriendsAndConnectionsNotInvited, [userID, otherID])
+        proc.sendJSON(res, notInvitedPromise, proc.processUsers)
     }
 })
 
