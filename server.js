@@ -5,9 +5,9 @@ const { hostEvent } = require("./hostEvent")
 
 
 // stuff for neo4j
-const uri = 'neo4j+s://10681f25.databases.neo4j.io';
+const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io'; // test database
 const user = 'neo4j';
-const password = 'GRy2om_UHnf7_Sf8CqIam4PEnyULBaJRxRlUAQCoLu4';
+const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
 
 
 const neo4j = require('neo4j-driver')
