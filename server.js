@@ -5,9 +5,9 @@ const { hostEvent } = require("./hostEvent")
 
 
 // stuff for neo4j
-const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io';
+const uri = 'neo4j+s://10681f25.databases.neo4j.io';
 const user = 'neo4j';
-const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
+const password = 'GRy2om_UHnf7_Sf8CqIam4PEnyULBaJRxRlUAQCoLu4';
 
 
 const neo4j = require('neo4j-driver')
@@ -193,9 +193,18 @@ app.get("/userList", (req, res) => {
 // app post group
 
 
-app.get("/test", (req, res) => {
-    console.log("Received Test Request")
-    res.json({ status: "success" })
+app.get("/info", (req, res) => {
+    console.log("Info Request")
+    const infoObject = {
+        releaseDate: "Jan 18, 2021",
+        version: "1.0",
+        notes: {
+            change1: "Connection to Neo4j production database",
+            change2: "Production app.yaml",
+            change3: "info get endpoint for version tracking"
+        }
+    }
+    res.json(infoObject)
 })
 
 app.get("/neo4jTest", (req, res) => {
@@ -204,3 +213,4 @@ app.get("/neo4jTest", (req, res) => {
         res.json({ status: "success" } )
     })
 })
+
