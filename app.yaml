@@ -1,10 +1,9 @@
 runtime: nodejs
 env: flex
 
-# production google app engine configuration
 
 automatic_scaling:
-  min_num_instances: 1
+  min_num_instances: 10
 resources:
   cpu: 2
   memory_gb: 2.3
