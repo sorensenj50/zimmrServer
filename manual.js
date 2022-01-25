@@ -8,5 +8,8 @@ const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
 
 
 const executor = new QueryExecutor(uri, user, password, false)
+// resetDatabase(executor)
+
+
 
 

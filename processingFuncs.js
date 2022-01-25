@@ -5,7 +5,9 @@ var proc = {
 
     guardAgainstDeletingProduction: function(uri) {
         if (uri == 'neo4j+s://10681f25.databases.neo4j.io') {
-            throw "DONT DELETE DATABASE"
+            throw "DONT DELETE PRODUCTION DATABASE"
+        } else {
+            console.log("Verified Running on Test Database")
         }
     },
 
