@@ -35,21 +35,24 @@ const read = {
 
     // user list
     getFriends: function(tx, userID, viewedUserID) {
-        return tx.run("MATCH (viewed:USER {userID: $viewedUserID})-[:FRIEND]-(other:USER) " +
+        return tx.run("" +
+            "MATCH (viewed:USER {userID: $viewedUserID})-[:FRIEND]-(other:USER) " +
             "OPTIONAL MATCH (self:USER {userID: $userID})-[r:FRIEND|CONNECTION]-(other) " +
             "RETURN other, TYPE(r), r.links",
             {'userID': userID, "viewedUserID": viewedUserID})
     },
 
     getConnections: function(tx, userID, viewedUserID) {
-        return tx.run("MATCH (viewed:USER {userID: $viewedUserID})-[:CONNECTION]-(other:USER) " +
+        return tx.run("" +
+            "MATCH (viewed:USER {userID: $viewedUserID})-[:CONNECTION]-(other:USER) " +
             "OPTIONAL MATCH (self:USER {userID: $userID})-[r:FRIEND|CONNECTION]-(other) " +
             "RETURN other, TYPE(r), r.links",
             {"userID": userID, "viewedUserID": viewedUserID})
     },
 
     getSentRequests: function(tx, userID) {
-        return tx.run("MATCH (self:USER {userID: $userID})-[:FRIEND_REQUEST]->(other:USER) " +
+        return tx.run("" +
+            "MATCH (self:USER {userID: $userID})-[:FRIEND_REQUEST]->(other:USER) " +
             "OPTIONAL MATCH (self)-[r:FRIEND|CONNECTION]-(other) " +
             "RETURN other, TYPE(r), r.links",
             {"userID": userID})
@@ -64,7 +67,8 @@ const read = {
     },
 
     getInvitedToEvent: function(tx, userID, eventID) {
-        return tx.run("MATCH (event:EVENT {eventID: $eventID})-[:INVITE|ATTEND|DISMISSED]-(other:USER) " +
+        return tx.run("" +
+            "MATCH (event:EVENT {eventID: $eventID})-[:INVITE|ATTEND|DISMISSED]-(other:USER) " +
             "MATCH (self:USER {userID: $userID}) " +
             "OPTIONAL MATCH (self)-[r:FRIEND|CONNECTION]-(other) " +
             "RETURN other, TYPE(r), r.links",
@@ -72,16 +76,27 @@ const read = {
         )
     },
 
+    getFriendsAndConnectionsNotInvited: function(tx, userID, eventID) {
+        return tx.run("" +
+            "MATCH (self:USER {userID: $userID})-[:HOST]-(event:EVENT {eventID: $eventID}) " +
+            "MATCH (self)-[r:FRIEND|CONNECTION]-(other:USER) " +
+            "WHERE NOT EXISTS ( (other)-[:INVITE|ATTEND|DISMISSED]-(event) ) " +
+            "RETURN other, TYPE(r), r.links",
+            {"userID": userID, "eventID": eventID})
+    },
+
     getAttendingEvent: function(tx, userID, eventID) {
-        return tx.run("MATCH (event:EVENT {eventID: $eventID})-[:ATTEND|HOST]-(other:USER) " +
+        return tx.run("" +
+            "MATCH (event:EVENT {eventID: $eventID})-[:ATTEND|HOST]-(other:USER) " +
             "MATCH (self:USER {userID: $userID}) " +
-            "OPTIONAL MATCH (self)-[r:FRIEND|CONNECTION]-(other) " +
+            "OPTIONAL MATCH (self)-[r:FRIEND|CONNECTION]-(other:USER) " +
             "RETURN other, TYPE(r), r.links",
             {"userID": userID, "eventID": eventID})
     },
 
     getLinkingFriends: function(tx, userID, otherUserID) {
-        return tx.run("MATCH (self:USER {userID: $userID})-[:FRIEND]-(linkingFriend:USER)-[:FRIEND]-(other:USER {userID: $otherUserID}) " +
+        return tx.run("" +
+            "MATCH (self:USER {userID: $userID})-[:FRIEND]-(linkingFriend:USER)-[:FRIEND]-(other:USER {userID: $otherUserID}) " +
             "RETURN linkingFriend, \"FRIEND\", null",
             {"userID": userID, "otherUserID": otherUserID})
     },

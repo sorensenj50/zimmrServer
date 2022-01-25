@@ -5,15 +5,11 @@ const { hostEvent } = require("./hostEvent")
 
 
 // stuff for neo4j
-const uri = 'neo4j+s://10681f25.databases.neo4j.io';
+const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io'; // test database
 const user = 'neo4j';
-const password = 'GRy2om_UHnf7_Sf8CqIam4PEnyULBaJRxRlUAQCoLu4';
+const password = '4KqMAcYQTToW21B-e9VbgwqFp6wRTY-bQDG0avitw3k';
 
-
-const neo4j = require('neo4j-driver')
-
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-const executor = new QueryExecutor(driver)
+const executor = new QueryExecutor(uri, user, password, false)
 
 // stuff for server
 const express = require("express");
@@ -162,7 +158,7 @@ app.post("/host", (req, res) => {
 app.get("/userList", (req, res) => {
     const userID = req.query.userID;
     const type = req.query.type;
-    const otherID = req.query.otherID;
+    const otherID = req.query.otherID; // other id sometimes is event id
 
     console.log("Received User List Get Request: " + type)
 
@@ -187,6 +183,9 @@ app.get("/userList", (req, res) => {
     } else if (type == "search") {
         const searchPromise = executor.readQuery(read.userSearch, [userID, req.query.searchTerm + "*"])
         proc.sendJSON(res, searchPromise, proc.processUsers)
+    } else if (type == "notInvited") {
+        const notInvitedPromise = executor.readQuery(read.getFriendsAndConnectionsNotInvited, [userID, otherID])
+        proc.sendJSON(res, notInvitedPromise, proc.processUsers)
     }
 })
 

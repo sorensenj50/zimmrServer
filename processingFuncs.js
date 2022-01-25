@@ -1,6 +1,16 @@
 const { read } = require("./postCypher")
+const neo4j = require("neo4j-driver")
 
 var proc = {
+
+    guardAgainstDeletingProduction: function(uri) {
+        if (uri == 'neo4j+s://10681f25.databases.neo4j.io') {
+            throw "DONT DELETE PRODUCTION DATABASE"
+        } else {
+            console.log("Verified Running on Test Database")
+        }
+    },
+
     getCurrentDate: function() {
         return new Date().getTime() / 1000
     },
@@ -152,8 +162,12 @@ var proc = {
 
 
 class QueryExecutor {
-    constructor(driver) {
-        this.driver = driver
+    constructor(uri, userName, password, override = false) {
+        if (!override) {
+            proc.guardAgainstDeletingProduction(uri)
+        }
+
+        this.driver = neo4j.driver(uri, neo4j.auth.basic(userName, password));
     }
 
     readQuery(query, params) {
