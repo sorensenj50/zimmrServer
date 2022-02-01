@@ -1,7 +1,7 @@
-const { read } = require("./getCypher")
-const { write } = require("./postCypher")
+const { read } = require("../src/getCypher")
+const { write } = require("../src/postCypher")
 const { proc, QueryExecutor } = require("./processingFunctions")
-const { getExtraInvites } = require("./hostEvent")
+const { getExtraInvites } = require("../src/hostEvent")
 
 const { testCypher, testProc, TestObject, UserList, Feed, UserRelationship,
     User, Groups, EventRelationship, GroupRelationship, Connections, ConnectionsRemoval, MessageEvent, Search, AltTestObject } = require("./testFuncs")
