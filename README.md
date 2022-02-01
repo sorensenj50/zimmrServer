@@ -86,7 +86,7 @@ The first line finds the user who wants to know this information, while the seco
 There are many other cypher queries, of course, but it wouldn't be appropriate to go over each of them here. 
 
 
-### JSON Processing
+#### JSON Processing
 
 Neo4j returns a lot more information for every query than I need, so for every `read` query I make, I must process the returned object into a usable `json` that I can then pass back to the client. 
 
@@ -131,11 +131,11 @@ function processUsers(result) {
 
 Note how `record.get(0)`, `record.get(1)`, and `record.get(2)` map to the three returned objects of `getAttendingEvent` function (which is indeed intended to return a `UserList`). The `json` that this function returns is then `res.json`ed to the requester. 
 
-### Unit Testing
+#### Unit Testing
 
 I regard unit testing as critically important, especially for my server. To that end, I used `Jest` to help me manage my test bank of over 100 tests to ensure that my Cypher queries perform as needed in even unlikely scenarios. To help make programmatic tests easier, I made a `TestObject` class to store inputs for unit tests. The class is as folllows:
 
-```
+```javascript
 class TestObject {
     constructor(setFunction, getFunction, setParams, getParams, processingFunction, idealResult, message, type) {
         this.setFunction = setFunction
@@ -168,7 +168,7 @@ class UserRelationship extends TestObject {
 
 This `UserRelationship` subclass provides a standard interface for those tests which `get` user relationships, but which want to test diffeent `setFunction`s, messages, and params. 
 
+### Conclusion
 
-
-
+Though it's impossible to disucss even every important aspect about my app in this README, I hope you were able to get a sense of Zimmr's design and that my thought process could be communicated.
 
