@@ -1,6 +1,7 @@
 <p>
     <img src="https://img.shields.io/badge/Node.js-16.13.2-green" />
     <img src="https://img.shields.io/badge/Express-4.17.2-blue" />
+    <img src="https://img.shields.io/badge/Neo4j--Driver-4.4.1-purple" />
     <img src="https://img.shields.io/badge/Jest-27.4.7-red" />
 </p>
 
@@ -128,7 +129,45 @@ function processUsers(result) {
 }
 ```
 
-Note how `record.get(0)`, `record.get(1)`, and `record.get(2)` map to the three returned objects of `getAttendingEvent` function (which is indeed intended to return a `UserList`). 
+Note how `record.get(0)`, `record.get(1)`, and `record.get(2)` map to the three returned objects of `getAttendingEvent` function (which is indeed intended to return a `UserList`). The `json` that this function returns is then `res.json`ed to the requester. 
+
+### Unit Testing
+
+I regard unit testing as critically important, especially for my server. To that end, I used `Jest` to help me manage my test bank of over 100 tests to ensure that my Cypher queries perform as needed in even unlikely scenarios. To help make programmatic tests easier, I made a `TestObject` class to store inputs for unit tests. The class is as folllows:
+
+```
+class TestObject {
+    constructor(setFunction, getFunction, setParams, getParams, processingFunction, idealResult, message, type) {
+        this.setFunction = setFunction
+        this.getFunction = getFunction
+        this.setParams = setParams
+        this.getParams = getParams
+        this.processingFunction = processingFunction
+        this.idealResult = idealResult
+        this.message = message
+        this.type = type
+    }
+    // ...
+}
+```
+
+There's no avoiding the need for both a `setFunction` (to write to the database before the test) and a `getFunction` (to check and see if the data was set as expected), but I strove for specificity in my unit tests by only having a production function as one of these functions. When testing whether sending a friend request works as expected, for instance, I used the production `sendFriendRequest` function as the setter, and the non-production `getUserRelationship` as the getter. This getter is too simple to have any use in my production app, but it is perfect for unit-testing purposes, since there's no chance it will fail. 
+
+This `TestObject` class is a bit verbose, so I subclassed it for more specific types of tests. 
+
+See, for instance, the `UserRelationship` subclass:
+
+```javascript
+class UserRelationship extends TestObject {
+    constructor(setFunction, user, viewed, message, ideal) {
+        const params = [user, viewed]
+        super(setFunction, testCypher.getUserRelationship, params, params, testProc.processRelationship, ideal, message, "String Array")
+    }
+}
+```
+
+This `UserRelationship` subclass provides a standard interface for those tests which `get` user relationships, but which want to test diffeent `setFunction`s, messages, and params. 
+
 
 
 
