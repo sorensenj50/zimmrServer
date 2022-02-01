@@ -1,6 +1,6 @@
 const { resetDatabase, createDemo } = require("./createDemo")
-const { initializeIndices } = require("./queryIndexes")
-const { QueryExecutor, proc } = require("./processingFuncs")
+const { initializeIndices } = require("../src/queryIndexes")
+const { QueryExecutor, proc } = require("../src/processingFuncs")
 
 const uri = 'neo4j+s://e16c9ee5.databases.neo4j.io'; // test database
 const user = 'neo4j';

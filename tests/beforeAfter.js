@@ -1,4 +1,4 @@
-const { write } = require("./postCypher");
+const { write } = require("../src/postCypher");
 const { testCypher, testProc } = require("./testFuncs");
 const { demoUsers, userIDsObject, demoGroups, demoEvents, groupIDsObject, eventIDsObject } = require("./demoData")
 const e = require("express");
