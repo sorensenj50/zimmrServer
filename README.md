@@ -85,6 +85,50 @@ The first line finds the user who wants to know this information, while the seco
 There are many other cypher queries, of course, but it wouldn't be appropriate to go over each of them here. 
 
 
+### JSON Processing
+
+Neo4j returns a lot more information for every query than I need, so for every `read` query I make, I must process the returned object into a usable `json` that I can then pass back to the client. 
+
+An example of such a processing function is this:
+
+```javascript
+
+function processUserStaticCore(recievedCore) {
+    let core = {}
+    core.userID = receivedCore.userID
+    core.userName = receivedCore.userName
+    core.firstName = receivedCore.firstName
+    core.fullName = receivedCore.fullName
+    core.hasImage = receivedCore.hasImage
+    return core
+}
+```
+
+Recall the `UserCore` `struct` from the other repo--this function is in charge of mapping what I call the `receivedCore` to an object with some of `UserCore`'s properties. The function is called "static" because it maps non-relational properties--it doesn't deal with `links` or `relationship`, for instance. Why do these static properties need to be mapped? This function exists because there are some properties attached to each user (and thus returned by Cypher) which I don't want to expose to every network call by the frontend. Namely, each user's phone number. 
+
+This function is called within the broader `processUsers` function, which does the processing work for every `UserList` in the app.
+
+```javascript
+function processUsers(result) {
+    const userID = result.summary.query.parameters.userID;
+    const mapped = result.records.map(record => {
+        let core = proc.processUserStaticCore(record.get(0).properties)
+
+        if (userID == core.userID) {
+             core.relationship = "SELF"; // self is treated as a relationship by the front end, but not in the database
+        } else {
+             core.relationship = record.get(1);
+        }
+     
+        core.links = proc.parseCypherInt(record.get(2))
+
+        return core
+    })
+    return { users: mapped }
+}
+```
+
+Note how `record.get(0)`, `record.get(1)`, and `record.get(2)` map to the three returned objects of `getAttendingEvent` function (which is indeed intended to return a `UserList`). 
 
 
 
